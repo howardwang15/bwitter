@@ -9,11 +9,11 @@ class Bweet extends React.Component {
     }
 
     render() {
-        const { user } = this.props;
+        const { user, text, timestamp, onLikeClick } = this.props;
         return (
             <div className='container'>
                 <div className='user-container'>
-                    <img src='https://tinyurl.com/y4ea26gh' width='70' height='70' />
+                    <img src={user.picture} width='70' height='70' />
 
                     <div className='name-container'>
                         <div className='name'>
@@ -27,14 +27,14 @@ class Bweet extends React.Component {
                 </div>
             
                 <div className='text'>
-                    This is some text
+                    {text}
                 </div>
 
                 <div className='timestamp'>
-                    { formatDateBweet(this.props.timestamp) }
+                    { formatDateBweet(timestamp) }
                 </div>
 
-                <input id='toggle-heart' type='checkbox' onClick={this.props.onClick}/>
+                <input id='toggle-heart' type='checkbox' onClick={onLikeClick}/>
                 <label for='toggle-heart'>❤</label>
             </div>
         )
