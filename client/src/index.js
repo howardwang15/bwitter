@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Bweet from './components/Bweet';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
@@ -15,11 +16,12 @@ class Test extends React.Component {
 
 const root = (
     <div>
-        TEST
+        <Bweet
+            user={{firstName: 'Howard', lastName: 'Wang', handle: 'howardwang15'}}
+            text='This is some text' 
+            timestamp={new Date()}
+            />
     </div>
-    // <Provider store={}>
-    //     <Test />
-    // </Provider>
 );
 
 ReactDOM.render(root, document.getElementById('root'));
