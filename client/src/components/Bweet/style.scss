@@ -58,4 +58,26 @@
         line-height: 18px;
         bottom: 20px;
     }
+
+    [id='toggle-heart'] {
+        position: absolute;
+        left: -100vw;
+    }
+
+    [for='toggle-heart'] {
+        color: #aab8c2;
+    }
+      
+    [id='toggle-heart']:checked + label {
+        color: #e2264d;
+    }
+
+    [for='toggle-heart'] {
+        font-size: 2em;
+        cursor: pointer;
+    }
+
+    [for='toggle-heart'] { 
+        align-self: center; 
+    }
 }

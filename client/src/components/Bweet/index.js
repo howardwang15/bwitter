@@ -33,6 +33,9 @@ class Bweet extends React.Component {
                 <div className='timestamp'>
                     { formatDateBweet(this.props.timestamp) }
                 </div>
+
+                <input id='toggle-heart' type='checkbox' onClick={this.props.onClick}/>
+                <label for='toggle-heart'>❤</label>
             </div>
         )
     }
