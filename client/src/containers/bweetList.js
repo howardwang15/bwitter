@@ -1,40 +1,45 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Bweet from '../components/Bweet';
+import { incrementLikeCount, decrementLikeCount, fetchBweets } from '../actions/bweets';
 
 class BweetList extends React.Component {
-    updateLikeCount(e) {
-        console.log(e.target.checked);
+
+    constructor() {
+        super();
+        this.updateLikeCount = this.updateLikeCount.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.getBweetsByUser('10');
+    }
+
+    updateLikeCount(e, liked, id) {
+        if (liked) {
+            this.props.decrementLikes(id);
+        } else {
+            this.props.incrementLikes(id);
+        }
     }
 
     render() {
-        const bweets = [
-            {
-                user: {
-                    firstName: 'Howard',
-                    lastName: 'Wang',
-                    handle: 'howardwang15',
-                    picture: 'https://tinyurl.com/y4ea26gh'
-                },
-                text: 'This is my final Bweet',
-                timestamp: new Date(),
-                id: 'somehash'
-            },
-            {
-                user: {
-                    firstName: 'Howard',
-                    lastName: 'Wang',
-                    handle: 'howardwang15',
-                    picture: 'https://tinyurl.com/y4ea26gh'
-                },
-                text: 'Hello Bwitter! Seems like I\'m the first one here...',
-                timestamp: new Date(),
-                id: 'anotherhash'
-            }
-        ]
         return (
-            bweets.map(bweet => <Bweet user={bweet.user} text={bweet.text} timestamp={bweet.timestamp} onLikeClick={this.updateLikeCount} key={bweet.id} />)
-        )
+            this.props.bweets.bweets.map(bweet => <Bweet user={bweet.user} text={bweet.text} timestamp={bweet.timestamp} liked={bweet.liked} onLikeClick={(e) => this.updateLikeCount(e, bweet.liked, bweet.id)} key={bweet.id} />)
+        );
     }
 }
 
-export default BweetList;
+const mapStateToProps = state => {
+    return { bweets: state.bweets };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        incrementLikes: likes => dispatch(incrementLikeCount(likes)),
+        decrementLikes: likes => dispatch(decrementLikeCount(likes)),
+        getBweetsByUser: userID => dispatch(fetchBweets(userID))
+    };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(BweetList);

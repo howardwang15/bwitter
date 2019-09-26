@@ -9,7 +9,9 @@ class Bweet extends React.Component {
     }
 
     render() {
-        const { user, text, timestamp, onLikeClick } = this.props;
+        const { user, text, timestamp, onLikeClick, id, liked } = this.props;
+
+        const heartClass = liked ? 'like-button liked' : 'like-button';
         return (
             <div className='container'>
                 <div className='user-container'>
@@ -34,8 +36,9 @@ class Bweet extends React.Component {
                     { formatDateBweet(timestamp) }
                 </div>
 
-                <input id='toggle-heart' type='checkbox' onClick={onLikeClick}/>
-                <label for='toggle-heart'>❤</label>
+                <div className='like-button-container'>
+                    <div className={heartClass} onClick={onLikeClick}></div>
+                </div>
             </div>
         )
     }
