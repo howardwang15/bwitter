@@ -1,6 +1,7 @@
 version: '3'
 services:
   server:
+    container_name: backend
     build: ./server
     expose:
       - ${SERVER_PORT}
@@ -19,11 +20,13 @@ services:
     environment:
       - CLIENT_PORT=${CLIENT_PORT}
     expose:
-      - 8000
+      - ${CLIENT_PORT}
     ports:
-      - 8000:8000
+      - ${CLIENT_PORT}:${CLIENT_PORT}
     volumes:
       - ./client/src:/www/app/bwitter/client/src
     links:
       - server
+    depends_on:
+      - "server"
     command: npm start

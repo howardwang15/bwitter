@@ -1,6 +1,6 @@
 export const INCREMENT_LIKES = 'INCREMENT_LIKES';
 export const DECREMENT_LIKES = 'DECREMENT_LIKES';
-export const FETCH_BWEETS = 'FETCH_BWEETS';
+export const SET_BWEETS = 'SET_BWEETS';
 
 export const incrementLikeCount = id => {
     return {
@@ -16,10 +16,9 @@ export const decrementLikeCount = id => {
     };
 }
 
-export const fetchBweets = userID => {
+export const setBweets = bweets => {
     return {
-        type: FETCH_BWEETS,
-        payload: userID
+        type: SET_BWEETS,
+        payload: bweets
     };
-}
-
+};

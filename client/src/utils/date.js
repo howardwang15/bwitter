@@ -1,4 +1,5 @@
-const formatDateBweet = date => {
+const formatDateBweet = dateString => {
+    const date = new Date(dateString);
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     let hours = date.getHours();
     let minutes = date.getMinutes();

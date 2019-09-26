@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Bweet from '../components/Bweet';
-import { incrementLikeCount, decrementLikeCount, fetchBweets } from '../actions/bweets';
+import { incrementLikeCount, decrementLikeCount, setBweets } from '../actions/bweets';
+import { API_URL, ALL_BWEETS_ROUTE } from '../config';
 
 class BweetList extends React.Component {
 
@@ -10,8 +11,15 @@ class BweetList extends React.Component {
         this.updateLikeCount = this.updateLikeCount.bind(this);
     }
 
-    componentDidMount() {
-        this.props.getBweetsByUser('10');
+    async componentDidMount() {
+        const url = `${API_URL}${ALL_BWEETS_ROUTE}`;
+        const res = await fetch(url, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const bweets = await res.json();
+        this.props.setBweets(bweets);
     }
 
     updateLikeCount(e, liked, id) {
@@ -45,7 +53,7 @@ const mapDispatchToProps = dispatch => {
     return {
         incrementLikes: likes => dispatch(incrementLikeCount(likes)),
         decrementLikes: likes => dispatch(decrementLikeCount(likes)),
-        getBweetsByUser: userID => dispatch(fetchBweets(userID))
+        setBweets: bweets => dispatch(setBweets(bweets))
     };
 };
 

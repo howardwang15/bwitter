@@ -1,38 +1,10 @@
-import { INCREMENT_LIKES, DECREMENT_LIKES, FETCH_BWEETS } from '../actions/bweets';
+import { INCREMENT_LIKES, DECREMENT_LIKES, SET_BWEETS } from '../actions/bweets';
 
-const bweets = [
-    {
-        user: {
-            firstName: 'Howard',
-            lastName: 'Wang',
-            handle: 'howardwang15',
-            picture: 'https://tinyurl.com/y4ea26gh'
-        },
-        text: 'This is my final Bweet',
-        timestamp: new Date(),
-        id: 'somehash',
-        liked: true,
-        likes: 1
-    },
-    {
-        user: {
-            firstName: 'Howard',
-            lastName: 'Wang',
-            handle: 'howardwang15',
-            picture: 'https://tinyurl.com/y4ea26gh'
-        },
-        text: 'Hello Bwitter! Seems like I\'m the first one here...',
-        timestamp: new Date(),
-        id: 'anotherhash',
-        liked: false,
-        likes: 0
-    }
-]
-
-export default (state = {bweets: bweets}, action) => {
+export default (state = {bweets: []}, action) => {
     switch (action.type) {
-        case FETCH_BWEETS:
-            return { ...state };
+
+        case SET_BWEETS:
+            return { ...state, ...action.payload };
 
         case INCREMENT_LIKES:
             let newStateIncrement = { ...state };
