@@ -9,7 +9,7 @@ class Bweet extends React.Component {
     }
 
     render() {
-        const { user, text, timestamp, onLikeClick, id, liked } = this.props;
+        const { user, text, timestamp, onLikeClick, likes, liked } = this.props;
 
         const heartClass = liked ? 'like-button liked' : 'like-button';
         return (
@@ -38,6 +38,7 @@ class Bweet extends React.Component {
 
                 <div className='like-button-container'>
                     <div className={heartClass} onClick={onLikeClick}></div>
+                    <div className='likes'>{likes}</div>
                 </div>
             </div>
         )

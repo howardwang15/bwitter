@@ -24,7 +24,15 @@ class BweetList extends React.Component {
 
     render() {
         return (
-            this.props.bweets.bweets.map(bweet => <Bweet user={bweet.user} text={bweet.text} timestamp={bweet.timestamp} liked={bweet.liked} onLikeClick={(e) => this.updateLikeCount(e, bweet.liked, bweet.id)} key={bweet.id} />)
+            this.props.bweets.bweets.map
+            (bweet => <Bweet 
+                        user={bweet.user} 
+                        text={bweet.text} 
+                        timestamp={bweet.timestamp} 
+                        liked={bweet.liked} 
+                        likes={bweet.likes}
+                        onLikeClick={(e) => this.updateLikeCount(e, bweet.liked, bweet.id)} 
+                        key={bweet.id} />)
         );
     }
 }
