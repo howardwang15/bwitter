@@ -1,37 +1,33 @@
 const express = require('express');
 const router = express.Router();
 
-router.route('/').get((req, res, next) => {
-    const bweets = [
-        {
-            user: {
-                firstName: 'Howard',
-                lastName: 'Wang',
-                handle: 'howardwang15',
-                picture: 'https://tinyurl.com/y4ea26gh'
-            },
-            text: 'This is my final Bweet',
-            timestamp: new Date(),
-            id: 'somehash',
-            liked: true,
-            likes: 1
-        },
-        {
-            user: {
-                firstName: 'Howard',
-                lastName: 'Wang',
-                handle: 'howardwang15',
-                picture: 'https://tinyurl.com/y4ea26gh'
-            },
-            text: 'Hello Bwitter! Seems like I\'m the first one here...',
-            timestamp: new Date(),
-            id: 'anotherhash',
-            liked: false,
-            likes: 0
-        }
-    ];
+const admin = require('firebase-admin');
+const serviceKey = require('./../../../../firebase-admin-key.json');
 
-    return res.json({ bweets });
+admin.initializeApp({
+    credential: admin.credential.cert(serviceKey)
+});
+
+const db = admin.firestore();
+
+
+router.route('/').get(async (req, res, next) => {
+
+    const getDataFromDoc = (doc) => {
+        return doc.get().then(doc => {
+            const data = doc.data();
+            data.id = doc.id;
+            return data;
+        });
+    };
+
+    const collection = db.collection('bweet');
+    const documents = await collection.listDocuments();
+    const promises = documents.map(getDataFromDoc);
+
+    const data = await Promise.all(promises);
+
+    return res.json({ data });
 });
 
 module.exports = { router };

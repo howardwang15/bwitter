@@ -19,7 +19,7 @@ class BweetList extends React.Component {
             }
         });
         const bweets = await res.json();
-        this.props.setBweets(bweets);
+        this.props.setBweets(bweets.data);
     }
 
     updateLikeCount(e, liked, id) {

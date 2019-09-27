@@ -4,7 +4,7 @@ export default (state = {bweets: []}, action) => {
     switch (action.type) {
 
         case SET_BWEETS:
-            return { ...state, ...action.payload };
+            return { ...state, bweets: action.payload };
 
         case INCREMENT_LIKES:
             let newStateIncrement = { ...state };
