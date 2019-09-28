@@ -4,6 +4,8 @@ const router = express.Router();
 const admin = require('firebase-admin');
 const serviceKey = require('./../../../../firebase-admin-key.json');
 
+const bweetHelper = require('../../../helpers/bweet');
+
 admin.initializeApp({
     credential: admin.credential.cert(serviceKey)
 });
@@ -23,22 +25,21 @@ router.route('/:id?').get(async (req, res, next) => {
         }
 
     } else {
-        const getDataFromDoc = (doc) => {
-            return doc.get().then(doc => {
-                const data = doc.data();
-                data.id = doc.id;
-                return data;
-            });
-        };
-    
         const collection = db.collection('bweet');
         const documents = await collection.listDocuments();
-        const promises = documents.map(getDataFromDoc);
+        const promises = documents.map(bweetHelper.getDataFromDoc);
     
         const data = await Promise.all(promises);
     
         return res.json({ data });
     }
+});
+
+router.route('/user/:handle').get(async (req, res, next) => {
+    const handle = req.params.handle;
+    const snapshots = await db.collection('bweet').where('user.handle', '==', handle).get();
+    const data = snapshots.docs.map(bweetHelper.getDataFromQueryDocuments);
+    return res.json({ data });
 });
 
 module.exports = { router };

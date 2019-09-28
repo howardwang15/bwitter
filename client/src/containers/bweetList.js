@@ -32,8 +32,8 @@ class BweetList extends React.Component {
 
     render() {
         return (
-            this.props.bweets.bweets.map
-            (bweet => <Bweet 
+            this.props.bweets.bweets.map(bweet => 
+                    <Bweet 
                         user={bweet.user} 
                         text={bweet.text} 
                         timestamp={bweet.timestamp} 
