@@ -3,9 +3,9 @@ import './styles.scss';
 
 class Button extends React.Component {
     render() {
-        const { text, onClick } = this.props;
+        const { text, onClick, color } = this.props;
         return (
-            <button className='button' onClick={onClick}>{text}</button>
+            <button className={`button-${color}`} onClick={onClick}>{text}</button>
         )
     }
 }

@@ -5,6 +5,7 @@ import './styles.scss';
 
 class Register extends React.Component {
     render() {
+        const { onCreateClick, onLoginClick } = this.props;
         return (
             <div className='register-container'>
                 <span className='title'>Sign Up</span>
@@ -13,10 +14,10 @@ class Register extends React.Component {
                 <Input placeholder='Handle...' label='Handle' />
                 <Input placeholder='Email...' label='Email' />
                 <Input placeholder='Password...' label='Password' />
-                <Button text='Create!' />
+                <Button text='Create!' color='blue' onClick={onCreateClick} />
                 <div className='signin-text'>
                     <span>Already have an account?</span>
-                    <Button text='Login' />
+                    <Button text='Login' color='gray' onClick={onLoginClick} />
                 </div>
             </div>
         )
