@@ -3,20 +3,32 @@ import AuthComponent from '../components/Auth';
 
 class Auth extends React.Component {
 
+    constructor() {
+        super();
+        this.state = {
+            register: false
+        };
+    }
+
     onLoginClick = () => {
-        console.log('Switching to sign in!');
+        this.setState(prevState => ({
+            register: false
+        }));
     }
 
     onCreateClick = () => {
         console.log('Creating user!');
     }
 
-    onSigninClick = () => {
-        console.log('Signing in user!');
-    }
 
     onSignupClick = () => {
-        console.log('Switching to sign up!');
+        this.setState(prevState => ({
+            register: true
+        }));
+    }
+
+    onSigninClick = () => {
+        console.log('Signing in user!');
     }
 
     render() {
@@ -26,6 +38,7 @@ class Auth extends React.Component {
                 onCreateClick={this.onCreateClick}
                 onSigninClick={this.onSigninClick}
                 onSignupClick={this.onSignupClick}
+                register={this.state.register}
                 />
         )
     }

@@ -4,10 +4,12 @@ import Login from './login';
 
 class Auth extends React.Component {
     render() {
-        const { onCreateClick, onLoginClick, onSigninClick, onSignupClick } = this.props;
+        const { onCreateClick, onLoginClick, onSigninClick, onSignupClick, register } = this.props;
         return (
-            // <Register onCreateClick={onCreateClick} onLoginClick={onLoginClick} />
-            <Login onLoginClick={onSigninClick} onSignupClick={onSignupClick} />
+            this.props.register ? 
+                <Register onCreateClick={onCreateClick} onLoginClick={onLoginClick} />
+            :
+                <Login onLoginClick={onSigninClick} onSignupClick={onSignupClick} />
         )
     }
 }
