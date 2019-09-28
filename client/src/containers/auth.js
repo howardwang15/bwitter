@@ -6,8 +6,19 @@ class Auth extends React.Component {
     constructor() {
         super();
         this.state = {
-            register: false
+            register: false,
+            email: '',
+            password: '',
+            firstName: '',
+            lastName: '',
+            handle: ''
         };
+    }
+
+    onInputChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
     }
 
     onLoginClick = () => {
@@ -29,6 +40,8 @@ class Auth extends React.Component {
 
     onSigninClick = () => {
         console.log('Signing in user!');
+        console.log(this.state.email);
+        console.log(this.state.password);
     }
 
     render() {
@@ -39,6 +52,7 @@ class Auth extends React.Component {
                 onSigninClick={this.onSigninClick}
                 onSignupClick={this.onSignupClick}
                 register={this.state.register}
+                onInputChange={this.onInputChange}
                 />
         )
     }

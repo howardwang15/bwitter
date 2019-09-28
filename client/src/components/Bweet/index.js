@@ -37,7 +37,7 @@ class Bweet extends React.Component {
                 </div>
 
                 <div className='like-button-container'>
-                    <div className={heartClass} onClick={onLikeClick}></div>
+                    <div className={heartClass} onClick={onLikeClick} />
                     <div className='likes'>{likes}</div>
                 </div>
             </div>

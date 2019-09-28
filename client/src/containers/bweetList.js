@@ -40,7 +40,8 @@ class BweetList extends React.Component {
                         liked={bweet.liked} 
                         likes={bweet.likes}
                         onLikeClick={(e) => this.updateLikeCount(e, bweet.liked, bweet.id)} 
-                        key={bweet.id} />)
+                        key={bweet.id}
+                        />)
         );
     }
 }
