@@ -10,12 +10,14 @@ class Login extends React.Component {
             <div className='login-container'>
                 <span className='title'>Login</span>
                 <Input
+                    type='text'
                     name='email'
                     placeholder='Email...'
                     label='Email'
                     onChange={onInputChange}
                     />
                 <Input
+                    type='password'
                     name='password'
                     placeholder='Password...'
                     label='Password'

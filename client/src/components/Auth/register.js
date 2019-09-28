@@ -38,15 +38,15 @@ class Register extends React.Component {
                     onChange={onInputChange}
                     />
                 <Input
-                    type='text'
+                    type='password'
                     name='password'
                     placeholder='Password...'
                     label='Password'
                     onChange={onInputChange}
                     />
                 <Input
-                    type='text'
-                    name='password'
+                    type='password'
+                    name='passwordReenter'
                     placeholder='Password...'
                     label='Reenter your password'
                     onChange={onInputChange}
