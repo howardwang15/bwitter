@@ -1,6 +1,7 @@
 import React from 'react';
 import AuthComponent from '../components/Auth';
 import Errorbar from '../components/Errorbar';
+import { API_URL, REGISTER_USER_ROUTE, LOGIN_USER_ROUTE } from '../config';
 
 class Auth extends React.Component {
 
@@ -72,7 +73,7 @@ class Auth extends React.Component {
     }
 
 
-    onCreateClick = () => {
+    onCreateClick = async () => {
         let signup = {
             email: this.state.email,
             password: this.state.password,
@@ -90,6 +91,23 @@ class Auth extends React.Component {
         }
 
         const { passwordReenter, ...register } = signup;
+        const url = `${API_URL}${REGISTER_USER_ROUTE}`;
+        
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ register })
+        });
+        
+        const data = await res.json();
+        if (data.error) {
+            this.setState(prevState => ({
+                error: data.error
+            }));
+            return;
+        }
     }
 
 

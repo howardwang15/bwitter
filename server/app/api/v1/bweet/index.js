@@ -1,19 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const admin = require('firebase-admin');
-const serviceKey = require('./../../../../firebase-admin-key.json');
 
 const bweetHelper = require('../../../helpers/bweet');
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceKey)
-});
-
-const db = admin.firestore();
-
-
 router.route('/:id?').get(async (req, res, next) => {
+    const admin = req.app.get('admin');
+    const db = admin.firestore();
     if (req.params.id) {
         const doc = await db.collection('bweet').doc(req.params.id).get();
         const bweet = doc.data();
