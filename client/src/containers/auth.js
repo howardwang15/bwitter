@@ -1,10 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import AuthComponent from '../components/Auth';
 import Errorbar from '../components/Errorbar';
 import { API_URL, REGISTER_USER_ROUTE, LOGIN_USER_ROUTE } from '../config';
+import { setUser } from '../actions/user';
 
 class Auth extends React.Component {
-
     constructor() {
         super();
         this.state = {
@@ -59,12 +60,19 @@ class Auth extends React.Component {
     }
 
 
+    /**
+     * Auth inputs updates
+     */
     onInputChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         });
     }
 
+
+    /**
+     * Switch to login click
+     */
     onLoginClick = () => {
         this.setState(prevState => ({
             register: false,
@@ -72,7 +80,9 @@ class Auth extends React.Component {
         }));
     }
 
-
+    /**
+     * Register click
+     */
     onCreateClick = async () => {
         let signup = {
             email: this.state.email,
@@ -108,9 +118,13 @@ class Auth extends React.Component {
             }));
             return;
         }
+        localStorage.setItem('user', JSON.stringify(data.user));
+        this.props.login(data.user);
     }
 
-
+    /**
+     * Switch to signup button click
+     */
     onSignupClick = () => {
         this.setState(prevState => ({
             register: true,
@@ -118,7 +132,10 @@ class Auth extends React.Component {
         }));
     }
 
-    onSigninClick = () => {
+    /**
+     * Login click
+     */
+    onSigninClick = async () => {
         const login = {
             email: this.state.email,
             password: this.state.password
@@ -131,6 +148,27 @@ class Auth extends React.Component {
             }));
             return;
         }
+
+        const url = `${API_URL}${LOGIN_USER_ROUTE}`;
+
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ login })
+        });
+
+        const data = await res.json();
+        if (data.error) {
+            this.setState(prevState => ({
+                error: data.error
+            }));
+            return;
+        }
+
+        localStorage.setItem('user', JSON.stringify(data.user));
+        this.props.login(data.user);
     }
 
     render() {
@@ -150,4 +188,16 @@ class Auth extends React.Component {
     }
 }
 
-export default Auth;
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    };
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        login: user => dispatch(setUser(user))
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

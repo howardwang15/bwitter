@@ -6,8 +6,6 @@ dotenv.config({ path: path.resolve('../.env') });
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-
-
 const admin = require('firebase-admin');
 const serviceKey = require('./firebase-admin-key.json');
 admin.initializeApp({
