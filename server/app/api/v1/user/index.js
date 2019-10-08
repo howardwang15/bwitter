@@ -1,7 +1,25 @@
 const express = require('express');
 const router = express.Router();
 const fetch = require('node-fetch');
+const userModule = require('../../../db').userModule;
 
+
+router.get('/:id?', (async (req, res, next) => {
+    try {
+        if (req.params.id) {
+            const user = await userModule.findUserById(req.params.id);
+            if (!user)
+                return res.json({ user: null, error: null });
+            else
+                return res.json({ user, error: null });
+        } else {
+            const users = await userModule.findAllUsers();
+            return res.json({ user: users, error: null });
+        }
+    } catch(e) {
+        return res.json({ user: null, error: e });
+    }
+}));
 
 router.post('/register', (async (req, res, next) => {
     const admin = req.app.get('admin');

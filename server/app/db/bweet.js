@@ -1,4 +1,4 @@
-const { admin, firebase } = require('./setup');
+const { admin } = require('./setup');
 const db = admin.firestore();
 
 const findBweetById = id => {
@@ -51,7 +51,7 @@ const findBweetByHandle = handle => {
             reject(e);
         }
     });
-}
+};
 
 module.exports = {
     findBweetById,

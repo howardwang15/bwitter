@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { bweetModule } = require('../../../db');
 
-const bweetHelper = require('../../../helpers/bweet');
-
 router.route('/:id?').get(async (req, res, next) => {
     if (req.params.id) {
         const bweet = await bweetModule.findBweetById(req.params.id);

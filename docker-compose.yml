@@ -9,6 +9,8 @@ services:
       API_HOST: ${API_HOST}
       SERVER_PORT: ${SERVER_PORT}
       API_KEY: ${API_KEY}
+      PROJECT_ID: ${PROJECT_ID}
+      APP_ID: ${APP_ID}
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
