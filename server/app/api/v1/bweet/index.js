@@ -5,7 +5,6 @@ const { bweetModule } = require('../../../db');
 router.route('/:id?').get(async (req, res, next) => {
     if (req.params.id) {
         const bweet = await bweetModule.findBweetById(req.params.id);
-
         if (!bweet)
             return res.json({ data: null});
         else
