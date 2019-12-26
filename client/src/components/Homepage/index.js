@@ -5,7 +5,7 @@ import Modal from '../Modal';
 
 class Homepage extends React.Component {
     render() {
-        const { onNewBweet } = this.props;
+        const { onNewBweet, onInputChange } = this.props;
         return (
             <div>
                 <ActionBar />

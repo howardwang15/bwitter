@@ -6,21 +6,23 @@ class Modal extends React.Component {
     constructor() {
         super();
         this.state = {
-            characterCount: 0
+            message: ""
         };
     }
 
     handleInputChange = e => {
-        const count = e.target.value.length;
-        this.props.onInputChange(e.target.value);
+        const message = e.target.value;
         this.setState((prev) => ({
-            characterCount: count
+            message
         }));
     }
 
+    onSubmitBweet = () => {
+        this.props.onSubmitClick(this.state.message);
+    }
+
     render() {
-        const { characterCount } = this.state;
-        const { onSubmitClick } = this.props;
+        const { message } = this.state;
         return (
             <div className="modal-container">
                 <div className="modal-wrapper">
@@ -33,13 +35,13 @@ class Modal extends React.Component {
                         </div>
                         <div className="submit">
                             <div className="count">
-                                {characterCount}/140
+                                {message.length}/140
                             </div>
                             
                             <Button
                                 text="Tweet"
                                 color="blue"
-                                onClick={onSubmitClick}
+                                onClick={this.onSubmitBweet}
                                 />
                         </div>
                     </div>
