@@ -26,7 +26,7 @@ class Modal extends React.Component {
         const { onClose } = this.props;
         return (
             <div className="modal-container">
-                <div className="modal-wrapper">
+                <div className="modal-wrapper show-modal">
                     <div className="modal-header">
                         Compose new Bweet
                     </div>
