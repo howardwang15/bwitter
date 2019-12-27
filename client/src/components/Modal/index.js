@@ -23,12 +23,14 @@ class Modal extends React.Component {
 
     render() {
         const { message } = this.state;
+        const { onClose } = this.props;
         return (
             <div className="modal-container">
                 <div className="modal-wrapper">
                     <div className="modal-header">
                         Compose new Bweet
                     </div>
+                    <div className="close" onClick={onClose}/>
                     <div className="modal">
                         <div className="modal-body">
                             <textarea type="text" rows="4" maxLength="140" placeholder="What's happening?" onChange={this.handleInputChange}/>
