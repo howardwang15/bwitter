@@ -53,8 +53,20 @@ const findBweetByHandle = handle => {
     });
 };
 
+const addBweet = bweet => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const doc = await db.collection('bweet').add(bweet);
+            resolve(doc);
+        } catch(e) {
+            reject(e);
+        }
+    });
+}
+
 module.exports = {
     findBweetById,
     findAllBweets,
-    findBweetByHandle
+    findBweetByHandle,
+    addBweet
 };

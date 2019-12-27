@@ -22,4 +22,20 @@ router.route('/user/:handle').get(async (req, res, next) => {
     return res.json({ data });
 });
 
+router.route('/add').post(async (req, res, next) => {
+    const { handle, firstName, lastName, picture } = req.body.user;
+    const user = { handle, firstName, lastName, picture };
+    const bweet = req.body.bweet;
+    const timestamp = new Date();
+    const document = {
+        liked: false,
+        likes: 0,
+        text: bweet,
+        timestamp,
+        user
+    };
+    const data = await bweetModule.addBweet(document);
+    return res.json({ data });
+});
+
 module.exports = { router };
