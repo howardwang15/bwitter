@@ -3,19 +3,13 @@ import { connect } from 'react-redux';
 import HomepageComponent from '../components/Homepage';
 import ActionBar from '../components/ActionBar';
 import Modal from '../components/Modal';
-import { API_URL, ALL_BWEETS_ROUTE, ADD_NEW_BWEET_ROUTE } from '../config';
+import { getAllBweets, addNewBweet } from '../utils/fetcher';
 import { incrementLikeCount, decrementLikeCount, setBweets } from '../actions/bweets';
 import { openModal, closeModal } from '../actions/modal';
 
 class HomePage extends React.Component {
     async componentDidMount() {
-        const url = `${API_URL}${ALL_BWEETS_ROUTE}`;
-        const res = await fetch(url, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const bweets = await res.json();
+        const bweets = await getAllBweets();
         this.props.setBweets(bweets.data);
     }
 
@@ -28,16 +22,11 @@ class HomePage extends React.Component {
     }
 
     onNewBweet = async (bweet) => {
-        const url = `${API_URL}${ADD_NEW_BWEET_ROUTE}`;
         const user = JSON.parse(localStorage.getItem('user'));
+        const data = await addNewBweet(bweet, user);
         this.props.closeModal();
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ user, bweet })
-        });
+        const bweets = await getAllBweets();
+        this.props.setBweets(bweets);
     }
 
     render() {
