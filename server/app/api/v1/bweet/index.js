@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { bweetModule } = require('../../../db');
+const { isUserAuthenticated } = require('../../../middleware').auth;
 
+router.use(isUserAuthenticated);
 router.route('/:id?').get(async (req, res, next) => {
     if (req.params.id) {
         const bweet = await bweetModule.findBweetById(req.params.id);
