@@ -81,40 +81,19 @@ const findUserByEmail = email => {
 
 const login = user => {
     return new Promise(async (resolve, reject) => {
-        const firebaseLoginUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.API_KEY}`;
-        try {
-            const response = await fetch(firebaseLoginUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ ...user, returnSecureToken: true })
-            });
-            const payload = await response.json();
-
-            if (payload.error) {
-                let errorMessage;
-                switch (payload.error.message) {
-                    case 'INVALID_PASSWORD':
-                        errorMessage = 'Invalid password entered';
-                        break;
-                    case 'EMAIL_NOT_FOUND':
-                        errorMessage = 'Invalid email entered';
-                        break;
-                    default:
-                        errorMessage = payload.error.message;
-                        break;
-                }
-                reject(errorMessage);
-            }
-
-            const document = await db.collection('user').doc(payload.localId).get();
-            const data = document.data();
-            data.token = payload.idToken;
-            resolve(data);
-        } catch (e) {
-            reject(e);
+        let userDoc = await findUserByEmail(user.email);
+        if (!userDoc.length) {
+            reject({ message: 'Email not found.', status: 400 });
         }
+
+        userDoc = userDoc[0];
+        bcrypt.compare(user.password, userDoc.password).then((res) => {
+            if (res) {
+                resolve(userDoc);
+            } else {
+                reject({ message: 'Email or password is incorrect.', status: 400 });
+            }
+        });
     });
 };
 
@@ -168,7 +147,7 @@ const logout = user => {
 
 const createToken = hashedUser => {
     return new Promise(async (resolve, reject) => {
-        // keep user signed in for 3600
+        // keep user signed in for 1 hour
         jwt.sign(hashedUser, process.env.APP_SECRET, { expiresIn: 3600 }, (err, token) => {
             if (err) {
                 reject({ message: err.message, status: 500 });

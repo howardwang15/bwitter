@@ -47,9 +47,10 @@ router.post('/login', (async (req, res) => {
     const userInfo = req.body.login;
     try {
         const user = await userModule.login(userInfo);
-        return res.json({ user, error: null });
+        const token = await userModule.createToken(user);
+        return res.json({ token, error: null });
     } catch(e) {
-        return res.json({ error: e });
+        return res.status(e.status).json({ error: e.message });
     }
 }));
 
