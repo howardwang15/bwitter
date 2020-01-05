@@ -3,7 +3,7 @@ const router = express.Router();
 const userModule = require('../../../db').userModule;
 
 
-router.get('/:id?', (async (req, res, next) => {
+router.get('/:id?', (async (req, res) => {
     try {
         if (req.params.id) {
             const user = await userModule.findUserById(req.params.id);
@@ -21,7 +21,7 @@ router.get('/:id?', (async (req, res, next) => {
 }));
 
 
-router.get('/handle/:handle', (async (req, res, next) => {
+router.get('/handle/:handle', (async (req, res) => {
     try {
         const user = await userModule.findUserByHandle(req.params.handle);
         return res.json({ user, error: null });
@@ -31,18 +31,19 @@ router.get('/handle/:handle', (async (req, res, next) => {
 }));
 
 
-router.post('/register', (async (req, res, next) => {
+router.post('/register', (async (req, res) => {
     const userInfo = req.body.register;
     try {
         const user = await userModule.create(userInfo);
-        return res.json({ error: null, user });
+        const token = await userModule.createToken(user);
+        return res.json({ error: null, token });
     } catch (e) {
-        return res.json({ error: e });
+        return res.status(e.status).json({ error: e.message });
     }
 }));
 
 
-router.post('/login', (async (req, res, next) => {
+router.post('/login', (async (req, res) => {
     const userInfo = req.body.login;
     try {
         const user = await userModule.login(userInfo);
@@ -51,5 +52,15 @@ router.post('/login', (async (req, res, next) => {
         return res.json({ error: e });
     }
 }));
+
+
+router.post('/logout', (async (req, res) => {
+    try {
+        const user = await userModule.logout();
+    } catch(e) {
+        return res.json({ error: e });
+    }
+}));
+
 
 module.exports = { router };
