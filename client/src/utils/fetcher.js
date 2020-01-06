@@ -1,9 +1,10 @@
 import * as routes from '../config';
 
-export const getAllBweets = async () => {
+export const getAllBweets = async user => {
     const url = `${routes.API_URL}${routes.ALL_BWEETS_ROUTE}`;
     const res = await fetch(url, {
         headers: {
+            'Authorization': `Bearer ${user.token}`,
             'Content-Type': 'application/json'
         }
     });
@@ -15,6 +16,7 @@ export const addNewBweet = async (bweet, user) => {
     const res = await fetch(url, {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${user.token}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ user, bweet })

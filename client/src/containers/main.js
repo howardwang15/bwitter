@@ -6,15 +6,15 @@ import Homepage from './homepage';
 
 class MainComponent extends React.Component {
     render() {
-        const user = localStorage.getItem('user');
+        const loggedIn = localStorage.getItem('user') || this.props.user;
         return (
-            user ? <Homepage /> : <Auth />
+            loggedIn ? <Homepage /> : <Auth />
         )
     }
 }
 
 const mapStateToProps = state => {
-    return state;
+    return state.auth;
 }
 
 export default connect(mapStateToProps)(MainComponent);

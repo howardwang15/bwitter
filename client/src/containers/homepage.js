@@ -6,10 +6,21 @@ import Modal from '../components/Modal';
 import { getAllBweets, addNewBweet } from '../utils/fetcher';
 import { incrementLikeCount, decrementLikeCount, setBweets } from '../actions/bweets';
 import { openModal, closeModal } from '../actions/modal';
+import { logout } from '../actions/user';
+
 
 class HomePage extends React.Component {
     async componentDidMount() {
-        const bweets = await getAllBweets();
+        const storedUser = localStorage.getItem('user');
+        if (!storedUser) {
+            return;
+        }
+        const user = JSON.parse(storedUser);
+        const bweets = await getAllBweets(user);
+        if (bweets.error) {
+            localStorage.removeItem('user');
+            return;
+        }
         this.props.setBweets(bweets.data);
     }
 
@@ -21,7 +32,7 @@ class HomePage extends React.Component {
         }
     }
 
-    onNewBweet = async (bweet) => {
+    onNewBweet = async bweet => {
         const user = JSON.parse(localStorage.getItem('user'));
         const data = await addNewBweet(bweet, user);
         this.props.closeModal();
@@ -32,7 +43,10 @@ class HomePage extends React.Component {
     render() {
         return (
             <div>
-                <ActionBar onButtonClick={this.props.openModal}/>
+                <ActionBar
+                    onComposeClick={this.props.openModal}
+                    onLogoutClick={this.props.logout}
+                    />
                 <HomepageComponent
                     onBweetLikeClick={this.updateLikeCount}
                     bweets={this.props.bweets.bweets}
@@ -53,7 +67,8 @@ const mapDispatchToProps = dispatch => {
         decrementLikes: likes => dispatch(decrementLikeCount(likes)),
         setBweets: bweets => dispatch(setBweets(bweets)),
         openModal: () => dispatch(openModal()),
-        closeModal: () => dispatch(closeModal())
+        closeModal: () => dispatch(closeModal()),
+        logout: () => dispatch(logout())
     };
 };
 
