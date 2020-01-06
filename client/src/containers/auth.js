@@ -9,7 +9,7 @@ class Auth extends React.Component {
     constructor() {
         super();
         this.state = {
-            register: true,
+            login: true,
             email: '',
             password: '',
             passwordReenter: '',
@@ -167,7 +167,6 @@ class Auth extends React.Component {
             return;
         }
 
-        localStorage.setItem('user', JSON.stringify(data.user));
         this.props.login(data.user);
     }
 
@@ -179,7 +178,7 @@ class Auth extends React.Component {
                     onCreateClick={this.onCreateClick}
                     onSigninClick={this.onSigninClick}
                     onSignupClick={this.onSignupClick}
-                    register={this.state.register}
+                    login={this.state.login}
                     onInputChange={this.onInputChange}
                     />
                 { this.state.error ? <Errorbar message={this.state.error}/> : null }
