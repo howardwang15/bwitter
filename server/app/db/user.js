@@ -135,16 +135,6 @@ const create = user => {
 };
 
 
-const logout = user => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            firebase.auth().signOut().then(() => console.log('signed out'));
-        } catch(e) {
-            reject(e);
-        }
-    });
-};
-
 const createToken = hashedUser => {
     return new Promise(async (resolve, reject) => {
         // keep user signed in for 1 hour
@@ -165,6 +155,5 @@ module.exports = {
     findAllUsers,
     login,
     create,
-    logout,
     createToken
 };
