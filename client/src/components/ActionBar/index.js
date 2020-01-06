@@ -4,13 +4,18 @@ import './styles.scss';
 
 class ActionBar extends React.Component {
     render() {
-        const { onButtonClick } = this.props;
+        const { onComposeClick, onLogoutClick } = this.props;
         return (
             <div className='actionbar-container'>
                 <Button
+                    text="Logout"
+                    color="gray"
+                    onClick={onLogoutClick}
+                    />
+                <Button
                     text="Compose new Bweet"
                     color="gray"
-                    onClick={onButtonClick}
+                    onClick={onComposeClick}
                     />
             </div>
         )
