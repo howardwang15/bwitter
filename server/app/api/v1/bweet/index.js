@@ -4,6 +4,7 @@ const { bweetModule } = require('../../../db');
 const { isUserAuthenticated } = require('../../../middleware').auth;
 
 router.use(isUserAuthenticated);
+
 router.route('/:id?').get(async (req, res, next) => {
     if (req.params.id) {
         const bweet = await bweetModule.findBweetById(req.params.id);
@@ -25,7 +26,7 @@ router.route('/user/:handle').get(async (req, res, next) => {
 });
 
 router.route('/add').post(async (req, res, next) => {
-    const { handle, firstName, lastName, picture } = req.body.user;
+    const { handle, firstName, lastName, picture } = req.user;
     const user = { handle, firstName, lastName, picture };
     const bweet = req.body.bweet;
     const timestamp = new Date();

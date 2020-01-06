@@ -32,11 +32,13 @@ router.get('/handle/:handle', (async (req, res) => {
 
 
 router.post('/register', (async (req, res) => {
-    const userInfo = req.body.register;
+    const userInfo = req.body.user;
     try {
         const user = await userModule.create(userInfo);
         const token = await userModule.createToken(user);
-        return res.json({ error: null, token });
+        delete user.password;
+        user.token = token;
+        return res.json({ error: null, user });
     } catch (e) {
         return res.status(e.status).json({ error: e.message });
     }
@@ -44,11 +46,13 @@ router.post('/register', (async (req, res) => {
 
 
 router.post('/login', (async (req, res) => {
-    const userInfo = req.body.login;
+    const userInfo = req.body.user;
     try {
         const user = await userModule.login(userInfo);
         const token = await userModule.createToken(user);
-        return res.json({ token, error: null });
+        delete user.password;
+        user.token = token;
+        return res.json({ error: null, user });
     } catch(e) {
         return res.status(e.status).json({ error: e.message });
     }
