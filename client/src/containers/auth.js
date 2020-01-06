@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import AuthComponent from '../components/Auth';
 import Errorbar from '../components/Errorbar';
-import { API_URL, REGISTER_USER_ROUTE, LOGIN_USER_ROUTE } from '../config';
 import { setUser } from '../actions/user';
+import { registerUser, signInUser } from '../utils/fetcher';
 
 class Auth extends React.Component {
     constructor() {
@@ -75,7 +75,7 @@ class Auth extends React.Component {
      */
     onLoginClick = () => {
         this.setState(prevState => ({
-            register: false,
+            login: true,
             error: ''
         }));
     }
@@ -101,25 +101,15 @@ class Auth extends React.Component {
         }
 
         const { passwordReenter, ...register } = signup;
-        const url = `${API_URL}${REGISTER_USER_ROUTE}`;
         
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ register })
-        });
-        
-        const data = await res.json();
-        if (data.error) {
+        const res = await registerUser(register);
+        if (res.error) {
             this.setState(prevState => ({
-                error: data.error
+                error: res.error
             }));
             return;
         }
-        localStorage.setItem('user', JSON.stringify(data.user));
-        this.props.login(data.user);
+        this.props.login(res.user);
     }
 
     /**
@@ -127,7 +117,7 @@ class Auth extends React.Component {
      */
     onSignupClick = () => {
         this.setState(prevState => ({
-            register: true,
+            login: false,
             error: ''
         }));
     }
@@ -149,25 +139,15 @@ class Auth extends React.Component {
             return;
         }
 
-        const url = `${API_URL}${LOGIN_USER_ROUTE}`;
-
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ login })
-        });
-
-        const data = await res.json();
-        if (data.error) {
+        const res = await signInUser(login);
+        if (res.error) {
             this.setState(prevState => ({
-                error: data.error
+                error: res.error
             }));
             return;
         }
 
-        this.props.login(data.user);
+        this.props.login(res.user);
     }
 
     render() {
@@ -189,7 +169,7 @@ class Auth extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        user: state.user
+        user: state.auth.user
     };
 }
 

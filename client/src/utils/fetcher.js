@@ -23,3 +23,27 @@ export const addNewBweet = async (bweet, user) => {
     });
     return res.json();
 }
+
+export const registerUser = async user => {
+    const url = `${routes.API_URL}${routes.REGISTER_USER_ROUTE}`;
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ user })
+    });
+    return res.json();
+}
+
+export const signInUser = async user => {
+    const url = `${routes.API_URL}${routes.LOGIN_USER_ROUTE}`;
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ user })
+    });
+    return res.json();
+}
