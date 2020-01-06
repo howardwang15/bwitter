@@ -29,7 +29,7 @@ router.route('/add').post(async (req, res, next) => {
     const { handle, firstName, lastName, picture } = req.user;
     const user = { handle, firstName, lastName, picture };
     const bweet = req.body.bweet;
-    const timestamp = new Date();
+    const timestamp = new Date().toString();
     const document = {
         liked: false,
         likes: 0,

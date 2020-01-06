@@ -36,8 +36,8 @@ class HomePage extends React.Component {
         const user = JSON.parse(localStorage.getItem('user'));
         const data = await addNewBweet(bweet, user);
         this.props.closeModal();
-        const bweets = await getAllBweets();
-        this.props.setBweets(bweets);
+        const bweets = await getAllBweets(user);
+        this.props.setBweets(bweets.data);
     }
 
     render() {
