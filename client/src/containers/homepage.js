@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import HomepageComponent from '../components/Homepage';
 import ActionBar from '../components/ActionBar';
 import Modal from '../components/Modal';
-import { getAllBweets, addNewBweet } from '../utils/fetcher';
+import { getAllBweets, addNewBweet, deleteBweet } from '../utils/fetcher';
 import { incrementLikeCount, decrementLikeCount, setBweets } from '../actions/bweets';
 import { openModal, closeModal } from '../actions/modal';
 import { logout } from '../actions/user';
@@ -13,6 +13,7 @@ class HomePage extends React.Component {
     async componentDidMount() {
         const storedUser = localStorage.getItem('user');
         if (!storedUser) {
+            this.props.logout();
             return;
         }
         const user = JSON.parse(storedUser);
@@ -40,6 +41,13 @@ class HomePage extends React.Component {
         this.props.setBweets(bweets.data);
     }
 
+    deleteBweet = async id => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const data = await deleteBweet(id, user);
+        const bweets = await getAllBweets(user);
+        this.props.setBweets(bweets.data);
+    }
+
     render() {
         return (
             <div>
@@ -50,6 +58,7 @@ class HomePage extends React.Component {
                 <HomepageComponent
                     onBweetLikeClick={this.updateLikeCount}
                     bweets={this.props.bweets.bweets}
+                    onBweetDelete={this.deleteBweet}
                     />
                 { this.props.modalOpened ? <Modal onSubmitClick={this.onNewBweet} onClose={this.props.closeModal} /> : null }
             </div>

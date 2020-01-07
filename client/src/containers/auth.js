@@ -16,6 +16,7 @@ class Auth extends React.Component {
             firstName: '',
             lastName: '',
             handle: '',
+            photo: '',
             error: ''
         };
     }
@@ -90,8 +91,10 @@ class Auth extends React.Component {
             passwordReenter: this.state.passwordReenter,
             firstName: this.state.firstName,
             lastName: this.state.lastName,
-            handle: this.state.handle
+            handle: this.state.handle,
+            photo: this.state.photo
         };
+
         const validation = this.validateSignup(signup);
         if (!validation.valid) {
             this.setState(prevState => ({
@@ -101,7 +104,6 @@ class Auth extends React.Component {
         }
 
         const { passwordReenter, ...register } = signup;
-        
         const res = await registerUser(register);
         if (res.error) {
             this.setState(prevState => ({

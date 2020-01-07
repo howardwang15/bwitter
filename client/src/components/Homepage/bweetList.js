@@ -4,17 +4,19 @@ import './styles.scss';
 
 class BweetList extends React.Component {
     render() {
+        const { bweets, onBweetLikeClick, onBweetDelete } = this.props;
         return (
             <div className="bweetlist-container">
                 {
-                    this.props.bweets.map(bweet => 
+                    bweets.map(bweet => 
                     <Bweet 
                         user={bweet.user} 
                         text={bweet.text} 
                         timestamp={bweet.timestamp} 
                         liked={bweet.liked} 
                         likes={bweet.likes}
-                        onLikeClick={(e) => this.props.onBweetLikeClick(e, bweet.liked, bweet.id)} 
+                        onLikeClick={(e) => onBweetLikeClick(e, bweet.liked, bweet.id)}
+                        onDeleteClick={() => onBweetDelete(bweet.id)}
                         key={bweet.id}
                         />)
                     }

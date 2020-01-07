@@ -24,6 +24,19 @@ export const addNewBweet = async (bweet, user) => {
     return res.json();
 }
 
+export const deleteBweet = async (id, user) => {
+    const url = `${routes.API_URL}${routes.DELETE_BWEET_ROUTE}`;
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${user.token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id })
+    });
+    return res.json();
+}
+
 export const registerUser = async user => {
     const url = `${routes.API_URL}${routes.REGISTER_USER_ROUTE}`;
     const res = await fetch(url, {
