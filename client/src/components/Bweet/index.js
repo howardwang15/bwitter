@@ -1,17 +1,19 @@
 import React from 'react';
 import { formatDateBweet } from '../../utils/date';
+import Button from '../Button';
 import './style.scss';
 
 
 class Bweet extends React.Component {
     constructor() {
         super();
+        this.currentUser = JSON.parse(localStorage.getItem('user'));
     }
 
     render() {
-        const { user, text, timestamp, onLikeClick, likes, liked } = this.props;
-
+        const { user, text, timestamp, onLikeClick, onDeleteClick, likes, liked } = this.props;
         const heartClass = liked ? 'like-button liked' : 'like-button';
+        const hideDeleteButton = this.currentUser.handle !== user.handle;
         return (
             <div className='container'>
                 <div className='user-container'>
@@ -36,9 +38,22 @@ class Bweet extends React.Component {
                     { formatDateBweet(timestamp) }
                 </div>
 
-                <div className='like-button-container'>
-                    <div className={heartClass} onClick={onLikeClick} />
-                    <div className='likes'>{likes}</div>
+                <div className='bottom'>
+                    <Button
+                        text='Delete'
+                        color='gray'
+                        hidden
+                        />
+                    <div className='like-button-container'>
+                        <div className={heartClass} onClick={onLikeClick} />
+                        <div className='likes'>{likes}</div>
+                    </div>
+                    <Button
+                        text='Delete'
+                        color='red'
+                        hidden={hideDeleteButton}
+                        onClick={onDeleteClick}
+                        />
                 </div>
             </div>
         )

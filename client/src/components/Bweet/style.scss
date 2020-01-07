@@ -76,6 +76,13 @@
 
 
     $red: #ff3252;
+
+    .bottom {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
     
     .like-button-container {
         display: flex;
