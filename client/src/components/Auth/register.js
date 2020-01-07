@@ -32,6 +32,13 @@ class Register extends React.Component {
                     />
                 <Input
                     type='text'
+                    name='photo'
+                    placeholder='Photo url...'
+                    label='Photo'
+                    onChange={onInputChange}
+                    />
+                <Input
+                    type='text'
                     name='email'
                     placeholder='Email...'
                     label='Email'
