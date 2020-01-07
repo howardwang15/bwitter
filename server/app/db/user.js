@@ -122,7 +122,7 @@ const create = user => {
                         firstName: user.firstName,
                         lastName: user.lastName,
                         handle: user.handle,
-                        picture: user.picture || ""
+                        picture: user.photo
                     };
                     await db.collection('user').add(hashedUser);
                     return resolve(hashedUser);

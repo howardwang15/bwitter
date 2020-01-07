@@ -5,7 +5,7 @@ const findBweetById = id => {
     return new Promise(async (resolve, reject) => {
         try {
             const doc = await db.collection('bweet').doc(id).get();
-            resolve(doc.data());
+            resolve(doc);
         } catch(e) {
             reject(e);
         }
@@ -17,6 +17,9 @@ const findAllBweets = () => {
         const getDataFromDoc = (doc) => {
             return doc.get().then(doc => {
                 const data = doc.data();
+                if (!data) {
+                    return null;
+                }
                 data.id = doc.id;
                 return data;
             });
@@ -26,9 +29,9 @@ const findAllBweets = () => {
             const collection = db.collection('bweet');
             const documents = await collection.listDocuments();
             const promises = documents.map(getDataFromDoc);
-        
             const data = await Promise.all(promises);
-            resolve(data);
+            const filtered = data.filter(bweet => bweet !== null);
+            resolve(filtered);
         } catch(e) {
             reject(e);
         }
@@ -64,9 +67,22 @@ const addBweet = bweet => {
     });
 }
 
+const deleteBweet = id => {
+    return new Promise(async (resolve, reject) => {
+        const bweet = await findBweetById(id);
+        try {
+            bweet.ref.delete();
+            resolve(true);
+        } catch(e) {
+            reject({ message: e.toString(), status: 400 });
+        }
+    });
+}
+
 module.exports = {
     findBweetById,
     findAllBweets,
     findBweetByHandle,
-    addBweet
+    addBweet,
+    deleteBweet
 };
