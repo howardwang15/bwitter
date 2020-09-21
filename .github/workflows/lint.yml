@@ -17,4 +17,4 @@ jobs:
         with:
           node-version: '14'
       - run: cd client && npm i && npm run lint
-      - run: cd client && npm i && npm run lint
+      - run: cd server && npm i && npm run lint
