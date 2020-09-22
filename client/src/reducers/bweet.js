@@ -1,13 +1,13 @@
 import { INCREMENT_LIKES, DECREMENT_LIKES, SET_BWEETS } from '../actions/bweets';
 
-export default (state = {bweets: []}, action) => {
+export default (state = { bweets: [] }, action) => {
     switch (action.type) {
-
-        case SET_BWEETS:
+        case SET_BWEETS: {
             return { ...state, bweets: action.payload };
+        }
 
-        case INCREMENT_LIKES:
-            let newStateIncrement = { ...state };
+        case INCREMENT_LIKES: {
+            const newStateIncrement = { ...state };
             for (let i = 0; i < state.bweets.length; i++) {
                 if (state.bweets[i].id === action.payload) {
                     newStateIncrement.bweets[i].liked = !newStateIncrement.bweets[i].liked;
@@ -16,9 +16,10 @@ export default (state = {bweets: []}, action) => {
                 }
             }
             return newStateIncrement;
+        }
 
-        case DECREMENT_LIKES:
-            let newStateDecrement = { ...state };
+        case DECREMENT_LIKES: {
+            const newStateDecrement = { ...state };
             for (let i = 0; i < state.bweets.length; i++) {
                 if (state.bweets[i].id === action.payload) {
                     newStateDecrement.bweets[i].liked = !newStateDecrement.bweets[i].liked;
@@ -27,8 +28,9 @@ export default (state = {bweets: []}, action) => {
                 }
             }
             return newStateDecrement;
+        }
 
         default:
             return { ...state };
     }
-}
+};

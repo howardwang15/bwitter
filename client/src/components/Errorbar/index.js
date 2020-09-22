@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './styles.scss';
 
 class Errorbar extends React.Component {
@@ -8,8 +9,12 @@ class Errorbar extends React.Component {
             <div className='error'>
                 <span className='message'>{`Error: ${message}`}</span>
             </div>
-        )
+        );
     }
 }
+
+Errorbar.propTypes = {
+    message: PropTypes.string.isRequired,
+};
 
 export default Errorbar;
