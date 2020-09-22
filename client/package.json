@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --host 0.0.0.0 --open --mode development",
     "build": "webpack --mode production",
-    "lint": "./node_modules/.bin/eslint ./src",
+    "lint": "./node_modules/.bin/eslint --ext js ./src",
     "fix": "./node_modules/.bin/eslint --fix  --ext .js,.jsx src"
   },
   "keywords": [],
