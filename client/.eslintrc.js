@@ -2,20 +2,30 @@ module.exports = {
     "parser": "babel-eslint",
     "extends": "airbnb",
     "env": {
-        "browser": true
+        "browser": true,
     },
     "rules": {
-        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-        "react/prefer-stateless-function": [0, { "ignorePureComponents": false}],
-        "react/button-has-type": [0],
-        "indent": ["error", 4],
-        "react/jsx-indent": [1, 4],
+        "arrow-body-style": [1, "as-needed"],
+        "indent": ["error", 4, { "SwitchCase": 1 }],
+        "jsx-a11y/click-events-have-key-events": "off",
+        "jsx-a11y/control-has-associated-label": "off",
         "jsx-quotes": [1, "prefer-single"],
-        "arrow-body-style": [1, "as-needed"]
+        "no-plusplus": "off",
+        "no-restricted-syntax": ["off"],
+        "no-unused-vars": ["error", { "args": "none" }],
+        "quote-props": "off",
+        "quotes": ["off", "single", { "allowTemplateLiterals": true }],
+        "react/button-has-type": [0],
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+        "react/jsx-indent": [1, 4],
+        "react/jsx-indent-props": [0],
+        "react/no-unescaped-entities": "off",
+        "react/prefer-stateless-function": [0, { "ignorePureComponents": false }],
+        "react/require-default-props": [0],
     },
     "plugins": [
         "react",
         "import",
-        "jsx-a11y"
+        "jsx-a11y",
     ],
 };

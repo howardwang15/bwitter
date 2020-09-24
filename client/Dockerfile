@@ -1,4 +1,4 @@
-FROM node:8.16.1-alpine
+FROM node:14.11.0-alpine
 RUN mkdir -p /www/app/bwitter/client
 WORKDIR /www/app/bwitter/client
 

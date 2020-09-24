@@ -1,19 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import HomepageComponent from '../components/Homepage';
 import ActionBar from '../components/ActionBar';
 import Modal from '../components/Modal';
 import { getAllBweets, addNewBweet, deleteBweet } from '../utils/fetcher';
-import { incrementLikeCount, decrementLikeCount, setBweets } from '../actions/bweets';
-import { openModal, closeModal } from '../actions/modal';
-import { logout } from '../actions/user';
-
+import { incrementLikeCountAction, decrementLikeCountAction, setBweetsAction } from '../actions/bweets';
+import { openModalAction, closeModalAction } from '../actions/modal';
+import { logoutAction } from '../actions/user';
 
 class HomePage extends React.Component {
     async componentDidMount() {
+        const { logout, setBweets } = this.props;
         const storedUser = localStorage.getItem('user');
         if (!storedUser) {
-            this.props.logout();
+            logout();
             return;
         }
         const user = JSON.parse(storedUser);
@@ -22,63 +23,84 @@ class HomePage extends React.Component {
             localStorage.removeItem('user');
             return;
         }
-        this.props.setBweets(bweets.data);
+        setBweets(bweets.data);
     }
 
-    updateLikeCount(e, liked, id) {
+    onDeleteBweet = async (id) => {
+        const { setBweets } = this.props;
+        const user = JSON.parse(localStorage.getItem('user'));
+        await deleteBweet(id, user);
+        const bweets = await getAllBweets(user);
+        setBweets(bweets.data);
+    }
+
+    onNewBweet = async (bweet) => {
+        const { closeModal, setBweets } = this.props;
+        const user = JSON.parse(localStorage.getItem('user'));
+        await addNewBweet(bweet, user);
+        closeModal();
+        const bweets = await getAllBweets(user);
+        setBweets(bweets.data);
+    }
+
+    updateLikeCount(_, liked, id) {
+        const { decrementLikes, incrementLikes } = this.props;
         if (liked) {
-            this.props.decrementLikes(id);
+            decrementLikes(id);
         } else {
-            this.props.incrementLikes(id);
+            incrementLikes(id);
         }
     }
 
-    onNewBweet = async bweet => {
-        const user = JSON.parse(localStorage.getItem('user'));
-        const data = await addNewBweet(bweet, user);
-        this.props.closeModal();
-        const bweets = await getAllBweets(user);
-        this.props.setBweets(bweets.data);
-    }
-
-    deleteBweet = async id => {
-        const user = JSON.parse(localStorage.getItem('user'));
-        const data = await deleteBweet(id, user);
-        const bweets = await getAllBweets(user);
-        this.props.setBweets(bweets.data);
-    }
-
     render() {
+        const {
+            openModal,
+            closeModal,
+            logout,
+            bweets,
+            modalOpened,
+        } = this.props;
+
         return (
             <div>
                 <ActionBar
-                    onComposeClick={this.props.openModal}
-                    onLogoutClick={this.props.logout}
-                    />
+                    onComposeClick={openModal}
+                    onLogoutClick={logout}
+                />
                 <HomepageComponent
                     onBweetLikeClick={this.updateLikeCount}
-                    bweets={this.props.bweets.bweets}
-                    onBweetDelete={this.deleteBweet}
-                    />
-                { this.props.modalOpened ? <Modal onSubmitClick={this.onNewBweet} onClose={this.props.closeModal} /> : null }
+                    bweets={bweets.bweets}
+                    onBweetDelete={this.onDeleteBweet}
+                />
+                { modalOpened
+                    ? <Modal onSubmitClick={this.onNewBweet} onClose={closeModal} />
+                    : null }
             </div>
-        )
+        );
     }
 }
 
-const mapStateToProps = state => {
-    return { bweets: state.bweets, ...state.modal };
-};
+const mapStateToProps = (state) => ({ bweets: state.bweets, ...state.modal });
 
-const mapDispatchToProps = dispatch => {
-    return {
-        incrementLikes: likes => dispatch(incrementLikeCount(likes)),
-        decrementLikes: likes => dispatch(decrementLikeCount(likes)),
-        setBweets: bweets => dispatch(setBweets(bweets)),
-        openModal: () => dispatch(openModal()),
-        closeModal: () => dispatch(closeModal()),
-        logout: () => dispatch(logout())
-    };
+const mapDispatchToProps = (dispatch) => ({
+    incrementLikes: (likes) => dispatch(incrementLikeCountAction(likes)),
+    decrementLikes: (likes) => dispatch(decrementLikeCountAction(likes)),
+    setBweets: (bweets) => dispatch(setBweetsAction(bweets)),
+    openModal: () => dispatch(openModalAction()),
+    closeModal: () => dispatch(closeModalAction()),
+    logout: () => dispatch(logoutAction()),
+});
+
+HomePage.propTypes = {
+    user: PropTypes.shape({ name: PropTypes.string.isRequired }),
+    logout: PropTypes.func.isRequired,
+    setBweets: PropTypes.func.isRequired,
+    decrementLikes: PropTypes.func.isRequired,
+    incrementLikes: PropTypes.func.isRequired,
+    openModal: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired,
+    bweets: PropTypes.shape({ bweets: PropTypes.string.isRequired }),
+    modalOpened: PropTypes.bool.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import AuthComponent from '../components/Auth';
 import Errorbar from '../components/Errorbar';
-import { setUser } from '../actions/user';
+import { setUserAction } from '../actions/user';
 import { registerUser, signInUser } from '../utils/fetcher';
 
 class Auth extends React.Component {
@@ -17,17 +18,16 @@ class Auth extends React.Component {
             lastName: '',
             handle: '',
             photo: '',
-            error: ''
+            error: '',
         };
     }
 
-
-    validateSignup = register => {
-        for (let key of Object.keys(register)) {
+    validateSignup = (register) => {
+        for (const key of Object.keys(register)) {
             if (register[key] === '') {
                 return {
                     valid: false,
-                    error: 'Fields can\'t be empty'
+                    error: 'Fields can\'t be empty',
                 };
             }
         }
@@ -35,49 +35,47 @@ class Auth extends React.Component {
         if (register.password !== register.passwordReenter) {
             return {
                 valid: false,
-                error: 'Passwords don\'t match'
+                error: 'Passwords don\'t match',
             };
         }
 
         return {
             valid: true,
-            error: null
+            error: null,
         };
     }
 
-    validateLogin = login => {
-        for (let key of Object.keys(login)) {
+    validateLogin = (login) => {
+        for (const key of Object.keys(login)) {
             if (login[key] === '') {
                 return {
                     valid: false,
-                    error: 'Fields can\'t be empty'
+                    error: 'Fields can\'t be empty',
                 };
             }
         }
         return {
             valid: true,
-            error: null
+            error: null,
         };
     }
-
 
     /**
      * Auth inputs updates
      */
     onInputChange = (e) => {
         this.setState({
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
         });
     }
-
 
     /**
      * Switch to login click
      */
     onLoginClick = () => {
-        this.setState(prevState => ({
+        this.setState(() => ({
             login: true,
-            error: ''
+            error: '',
         }));
     }
 
@@ -85,42 +83,54 @@ class Auth extends React.Component {
      * Register click
      */
     onCreateClick = async () => {
-        let signup = {
-            email: this.state.email,
-            password: this.state.password,
-            passwordReenter: this.state.passwordReenter,
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            handle: this.state.handle,
-            photo: this.state.photo
+        const {
+            email,
+            password,
+            passwordReenter,
+            firstName,
+            lastName,
+            handle,
+            photo,
+        } = this.state;
+
+        const { login } = this.props;
+
+        const signup = {
+            email,
+            password,
+            passwordReenter,
+            firstName,
+            lastName,
+            handle,
+            photo,
         };
 
         const validation = this.validateSignup(signup);
         if (!validation.valid) {
-            this.setState(prevState => ({
-                error: validation.error
+            this.setState(() => ({
+                error: validation.error,
             }));
             return;
         }
 
-        const { passwordReenter, ...register } = signup;
-        const res = await registerUser(register);
+        delete signup.passwordReenter;
+        const res = await registerUser(signup);
         if (res.error) {
-            this.setState(prevState => ({
-                error: res.error
+            this.setState(() => ({
+                error: res.error,
             }));
             return;
         }
-        this.props.login(res.user);
+        login(res.user);
     }
 
     /**
      * Switch to signup button click
      */
     onSignupClick = () => {
-        this.setState(prevState => ({
+        this.setState(() => ({
             login: false,
-            error: ''
+            error: '',
         }));
     }
 
@@ -128,31 +138,35 @@ class Auth extends React.Component {
      * Login click
      */
     onSigninClick = async () => {
-        const login = {
-            email: this.state.email,
-            password: this.state.password
+        const { email, password } = this.state;
+        const { login } = this.props;
+
+        const loginObj = {
+            email,
+            password,
         };
 
-        const validation = this.validateLogin(login);
+        const validation = this.validateLogin(loginObj);
         if (!validation.valid) {
-            this.setState(prevState => ({
-                error: validation.error
+            this.setState(() => ({
+                error: validation.error,
             }));
             return;
         }
 
-        const res = await signInUser(login);
+        const res = await signInUser(loginObj);
         if (res.error) {
-            this.setState(prevState => ({
-                error: res.error
+            this.setState(() => ({
+                error: res.error,
             }));
             return;
         }
 
-        this.props.login(res.user);
+        login(res.user);
     }
 
     render() {
+        const { error, login } = this.state;
         return (
             <div>
                 <AuthComponent
@@ -160,25 +174,25 @@ class Auth extends React.Component {
                     onCreateClick={this.onCreateClick}
                     onSigninClick={this.onSigninClick}
                     onSignupClick={this.onSignupClick}
-                    login={this.state.login}
+                    login={login}
                     onInputChange={this.onInputChange}
-                    />
-                { this.state.error ? <Errorbar message={this.state.error}/> : null }
+                />
+                { error ? <Errorbar message={error} /> : null }
             </div>
-        )
+        );
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        user: state.auth.user
-    };
-}
+const mapStateToProps = (state) => ({
+    user: state.auth.user,
+});
 
-const mapDispatchToProps = dispatch => {
-    return {
-        login: user => dispatch(setUser(user))
-    };
-}
+const mapDispatchToProps = (dispatch) => ({
+    login: (user) => dispatch(setUserAction(user)),
+});
+
+Auth.propTypes = {
+    login: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);
