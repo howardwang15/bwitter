@@ -6,17 +6,25 @@ services:
     expose:
       - ${SERVER_PORT}
     environment:
-      API_HOST: ${API_HOST}
-      SERVER_PORT: ${SERVER_PORT}
-      API_KEY: ${API_KEY}
-      PROJECT_ID: ${PROJECT_ID}
-      APP_ID: ${APP_ID}
-      APP_SECRET: ${APP_SECRET}
+      - API_HOST=${API_HOST}
+      - SERVER_PORT=${SERVER_PORT}
+      - API_KEY=${API_KEY}
+      - PROJECT_ID=${PROJECT_ID}
+      - APP_ID=${APP_ID}
+      - APP_SECRET=${APP_SECRET}
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
       - ./server/app:/www/app/bwitter/server/app
     command: npm start
+    restart: always
+    depends_on:
+      - postgres
 
   client:
     build: ./client
@@ -34,3 +42,13 @@ services:
     depends_on:
       - "server"
     command: npm start
+
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - 5432:5432
