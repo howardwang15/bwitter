@@ -14,6 +14,7 @@ module.exports = {
     "arrow-body-style": "off",
     "consistent-return": "off",
     "no-async-promise-executor": "off",
+    "no-param-reassign": "off",
     "quote-props": "off",
     "quotes": ["off", "single", { "allowTemplateLiterals": true }],
     "prefer-promise-reject-errors": "off",
