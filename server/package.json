@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "start": "nodemon -L index.js",
+    "start": "NODE_ENV=development nodemon -L index.js",
     "lint": "./node_modules/.bin/eslint --ext js ."
   },
   "repository": {
@@ -32,9 +32,9 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "firebase-admin": "^9.2.0",
-    "firebase-tools": "^8.10.0",
     "jsonwebtoken": "^8.5.1",
-    "node-fetch": "^2.6.1"
+    "pg": "^8.3.3",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.5"
   }
 }

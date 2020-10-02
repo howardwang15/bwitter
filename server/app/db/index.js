@@ -1,7 +1,7 @@
-const bweetModule = require("./bweet");
-const userModule = require("./user");
+const { db, User, Bweet } = require('./setup');
 
 module.exports = {
-  bweetModule,
-  userModule,
+  db,
+  User,
+  Bweet,
 };
