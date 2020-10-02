@@ -12,8 +12,38 @@ module.exports = function (Sequelize, db) {
     userId: { type: Sequelize.UUID, allowNull: false },
   });
 
-  Bweet.findById = function (id) {
-    return this.find(id);
+  Bweet.addExtras = function (models) {
+    this.belongsTo(models.User, { foreignKey: 'userId' });
+
+    Bweet.findById = function (id) {
+      return this.findOne(id);
+    };
+
+    Bweet.findByUserHandle = function (handle) {
+      return this.findAll({
+        include: [
+          {
+            model: models.User,
+            required: true,
+            where: {
+              handle,
+            },
+            attributes: ['firstName', 'lastName', 'handle', 'picture'],
+          },
+        ],
+        attributes: ['id', 'likes', 'text', 'userId'],
+      });
+    };
+
+    Bweet.add = function (document) {
+      return this.create(document);
+    };
+
+    Bweet.delete = function (id) {
+      return this.destroy({
+        where: { id },
+      });
+    };
   };
 
   return Bweet;

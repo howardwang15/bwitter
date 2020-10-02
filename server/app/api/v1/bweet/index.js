@@ -1,62 +1,59 @@
-const express = require("express");
-const { bweetModule } = require("../../../db");
+const express = require('express');
+const { Bweet } = require('../../../db');
 
 const router = express.Router();
-const { isUserAuthenticated } = require("../../../middleware").auth;
+const { isUserAuthenticated } = require('../../../middleware').auth;
 
 router.use(isUserAuthenticated);
 
-router.route("/:id?").get(async (req, res) => {
-  if (req.params.id) {
-    const bweet = await bweetModule.findBweetById(req.params.id);
-    if (!bweet) return res.json({ data: null });
-    return res.json({ data: bweet });
+router.route('/:id?').get(async (req, res) => {
+  try {
+    if (req.params.id) {
+      const bweet = await Bweet.findById(req.params.id);
+      if (!bweet) return res.status(200).json({ data: null });
+      return res.status(200).json({ data: bweet });
+    }
+    const data = await Bweet.findAll();
+    return res.status(200).json({ error: null, data });
+  } catch (e) {
+    return res.status(500).json({ error: e.toString() });
   }
-  const data = await bweetModule.findAllBweets();
-  return res.json({ data });
 });
 
-router.route("/user/:handle").get(async (req, res) => {
-  const { handle } = req.params;
-  const data = await bweetModule.findBweetByHandle(handle);
-  return res.json({ data });
+router.route('/user/:handle').get(async (req, res) => {
+  try {
+    const { handle } = req.params;
+    const data = await Bweet.findByUserHandle(handle);
+    return res.status(200).json({ error: null, data });
+  } catch (e) {
+    return res.status(500).json({ error: e.toString() });
+  }
 });
 
-router.route("/add").post(async (req, res) => {
-  const {
-    handle,
-    firstName,
-    lastName,
-    picture,
-  } = req.user;
-
-  const user = {
-    handle,
-    firstName,
-    lastName,
-    picture,
-  };
-
-  const { bweet } = req.body;
-  const timestamp = new Date().toString();
-  const document = {
-    liked: false,
-    likes: 0,
-    text: bweet,
-    timestamp,
-    user,
-  };
-  const data = await bweetModule.addBweet(document);
-  return res.json({ data });
+router.route('/add').post(async (req, res) => {
+  try {
+    const { text, userId } = req.body.bweet;
+    const timestamp = new Date().toString();
+    const document = {
+      likes: 0,
+      text,
+      timestamp,
+      userId,
+    };
+    const data = await Bweet.add(document);
+    return res.status(200).json({ data });
+  } catch (e) {
+    return res.status(500).json({ error: e.toString() });
+  }
 });
 
-router.route("/delete").post(async (req, res) => {
+router.route('/delete').delete(async (req, res) => {
   const bweetId = req.body.id;
   try {
-    await bweetModule.deleteBweet(bweetId);
-    return res.status(200).json({});
+    await Bweet.delete(bweetId);
+    return res.status(200).json({ error: null });
   } catch (e) {
-    return res.status(e.status).json({ error: e.message });
+    return res.status(500).json({ error: e.message });
   }
 });
 

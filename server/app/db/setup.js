@@ -15,7 +15,13 @@ const db = new Sequelize(
 
 const User = userSchema(Sequelize, db);
 const Bweet = bweetSchema(Sequelize, db);
-User.hasMany(Bweet, { sourceKey: 'id', foreignKey: 'userId' });
+
+const models = {
+  User,
+  Bweet,
+};
+
+Object.values(models).forEach((model) => model.addExtras(models));
 
 if (process.env.NODE_ENV === 'development') {
   db.sync({ force: true }).then(async () => {
@@ -39,6 +45,11 @@ if (process.env.NODE_ENV === 'development') {
       Bweet.create({
         likes: 4,
         text: 'Go Bruins!',
+        userId: user1Id,
+      }),
+      Bweet.create({
+        likes: 0,
+        text: 'Go USC!',
         userId: user1Id,
       }),
     ]);

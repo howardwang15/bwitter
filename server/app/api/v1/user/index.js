@@ -3,7 +3,7 @@ const { User } = require('../../../db');
 
 const router = express.Router();
 
-router.get('/:id', async (req, res) => {
+router.get('/:id?', async (req, res) => {
   try {
     if (req.params.id) {
       const user = await User.findById(req.params.id);
